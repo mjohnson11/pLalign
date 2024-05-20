@@ -1,0 +1,207 @@
+LOCUS       pMJ09                   3288 bp ds-DNA     circular     04-APR-2024
+DEFINITION  .
+FEATURES             Location/Qualifiers
+     misc_feature    29..270
+                     /label="OriT"
+                     /ApEinfo_revcolor="#b4abac"
+                     /ApEinfo_fwdcolor="#b4abac"
+     misc_feature    271..288
+                     /label="OriT"
+                     /ApEinfo_revcolor="#b4abac"
+                     /ApEinfo_fwdcolor="#b4abac"
+     misc_feature    299..464
+                     /label="Tn7L"
+                     /ApEinfo_revcolor="#b4abac"
+                     /ApEinfo_fwdcolor="#b4abac"
+     primer          476..522
+                     /label="oMJ29 (Kan-to-Tn7L)"
+                     /note="sequence: CTAGCGGTAATACGACTCACTATAGGTCAGGAAATGTGCGCGGAACC"
+                     /ApEinfo_revcolor="#faac61"
+                     /ApEinfo_fwdcolor="#faac61"
+     primer          complement(479..505)
+                     /label="oMJ42 (Tn7_BC_gib1)"
+                     /note="sequence: CTGACCTATAGTGAGTCGTATTACCGC"
+                     /ApEinfo_revcolor="#b1ff67"
+                     /ApEinfo_fwdcolor="#b1ff67"
+     promoter        483..501
+                     /label="T7 promoter"
+                     /ApEinfo_revcolor="#c6c9d1"
+                     /ApEinfo_fwdcolor="#c6c9d1"
+                     /note="note: promoter for bacteriophage T7 RNA polymerase"
+     promoter        483..501
+                     /label="T7 promoter"
+                     /ApEinfo_revcolor="#c6c9d1"
+                     /ApEinfo_fwdcolor="#c6c9d1"
+                     /note="label: T7 promoter note: promoter for bacteriophage T7 RNA polymerase"
+     modified_base   534..537
+                     /label="4b"
+                     /ApEinfo_revcolor="#808000"
+                     /ApEinfo_fwdcolor="#808000"
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}width 5 offset 0"
+     promoter        538..735
+                     /label="part2_promoter from pKMW2_KanR"
+                     /ApEinfo_revcolor="#ff9ccd"
+                     /ApEinfo_fwdcolor="#ff9ccd"
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}width 5 offset 0"
+     primer          complement(559..577)
+                     /label="oMJ1 (KanP-check-R)"
+                     /note="sequence: gcccagtctagctatcgcc"
+                     /ApEinfo_revcolor="#d6b295"
+                     /ApEinfo_fwdcolor="#d6b295"
+     misc_feature    complement(736..737)
+                     /label="4b"
+                     /ApEinfo_revcolor="#808000"
+                     /ApEinfo_fwdcolor="#808000"
+                     /label="4b(1)"
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}width 5 offset 0"
+     misc_feature    738..1532
+                     /label="KanR GENE"
+                     /ApEinfo_revcolor="#b1ff67"
+                     /ApEinfo_fwdcolor="#b1ff67"
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}width 5 offset 0"
+     primer          1477..1493
+                     /label="oMJ2 (KanT-check-F)"
+                     /note="sequence: CCGCTCCCGATTCGCAG"
+                     /ApEinfo_revcolor="#f8d3a9"
+                     /ApEinfo_fwdcolor="#f8d3a9"
+     misc_feature    1533..1536
+                     /label="4b"
+                     /ApEinfo_revcolor="#808000"
+                     /ApEinfo_fwdcolor="#808000"
+                     /label="4b(5)"
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}width 5 offset 0"
+     primer          complement(1564..1581)
+                     /label="oMJ7 (Kan-to-JW)"
+                     /note="sequence: AGAGACCTCGTGGACATCTATCGCAGGGCGTAATGCTCTG"
+                     /ApEinfo_revcolor="#b7e6d7"
+                     /ApEinfo_fwdcolor="#b7e6d7"
+     primer          complement(1564..1583)
+                     /label="oMJ19 (Kan-R-GG)"
+                     /note="sequence: GTTCATGGAAGACTTGCTCGCAGGGCGTAATGCTCTG"
+                     /ApEinfo_revcolor="#ff9ccd"
+                     /ApEinfo_fwdcolor="#ff9ccd"
+     modified_base   1582..1585
+                     /label="4b"
+                     /ApEinfo_revcolor="#808000"
+                     /ApEinfo_fwdcolor="#808000"
+                     /label="4b(6)"
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}width 5 offset 0"
+     misc_feature    1586..1603
+                     /label="ofeba285"
+                     /ApEinfo_revcolor="#85dae9"
+                     /ApEinfo_fwdcolor="#85dae9"
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}width 5 offset 0"
+     primer          complement(1586..1654)
+                     /label="oMJ3 (oBC-3NSW)"
+                     /note="sequence: GTCGACCTGCAGCGTACGNNNWSNNNWSNNNWSNNNWSNNNWSNNNWSNNNAGAGACCTCGTGGACATC"
+                     /ApEinfo_revcolor="#f58a5e"
+                     /ApEinfo_fwdcolor="#f58a5e"
+     misc_feature    1637..1654
+                     /label="ofeba286"
+                     /ApEinfo_revcolor="#85dae9"
+                     /ApEinfo_fwdcolor="#85dae9"
+                     /ApEinfo_graphicformat="arrow_data {{0 1 2 0 0 -1} {} 0}width 5 offset 0"
+     primer          1637..1655
+                     /label="oMJ43 (BC_gib2)"
+                     /note="sequence: CGTACGCTGCAGGTCGACT"
+                     /ApEinfo_revcolor="#9eafd2"
+                     /ApEinfo_fwdcolor="#9eafd2"
+     primer          complement(1637..1682)
+                     /label="oMJ22 (286-to-Tn7)"
+                     /note="sequence: CCATAACTTCCGTCTCTTATCCGAGTGAGTCGACCTGCAGCGTACG"
+                     /ApEinfo_revcolor="#c6c9d1"
+                     /ApEinfo_fwdcolor="#c6c9d1"
+     primer          1643..1682
+                     /label="oMJ35 (Tn7-round-286)"
+                     /note="sequence: CTGCAGGTCGACTCACTCGGATAAGAGACGGAAGTTATGG"
+                     /ApEinfo_revcolor="#b1ff67"
+                     /ApEinfo_fwdcolor="#b1ff67"
+     misc_feature    1655..1657
+                     /label="NEW_SEQ"
+                     /ApEinfo_revcolor="#f8d3a9"
+                     /ApEinfo_fwdcolor="#f8d3a9"
+     misc_feature    1681..1708
+                     /label="Barcoding Region"
+                     /ApEinfo_revcolor="#b4abac"
+                     /ApEinfo_fwdcolor="#b4abac"
+     misc_feature    complement(1727..1925)
+                     /label="Tn7R"
+                     /ApEinfo_revcolor="#b4abac"
+                     /ApEinfo_fwdcolor="#b4abac"
+     promoter        1936..2040
+                     /label="AmpR promoter"
+                     /ApEinfo_revcolor="#c6c9d1"
+                     /ApEinfo_fwdcolor="#c6c9d1"
+                     /note="gene: bla"
+     promoter        1936..2040
+                     /label="AmpR promoter"
+                     /ApEinfo_revcolor="#c6c9d1"
+                     /ApEinfo_fwdcolor="#c6c9d1"
+                     /note="gene: bla label: AmpR promoter"
+     CDS             2041..2901
+                     /label="AmpR"
+                     /ApEinfo_revcolor="#b7e6d7"
+                     /ApEinfo_fwdcolor="#b7e6d7"
+                     /note="codon_start: 1 gene: bla note: confers resistance to ampicillin, carbenicillin, and related antibiotics product: β-lactamase transl_table: 1 translation: MSIQHFRVALIPFFAAFCLPVFA,HPETLVKVKDAEDQLGARVGYIELDLNSGKILESFRPEERFPMMSTFKVLLCGAVLSRIDAGQEQLGRRIHYSQNDLVEYSPVTEKHLTDGMTVRELCSAAITMSDNTAANLLLTTIGGPKELTAFLHNMGDHVTRLDRWEPELNEAIPNDERDTTMPVAMATTLRKLLTGELLTLASRQQLIDWMEADKVAGPLLRSALPAGWFIADKSGAGERGSRGIIAALGPDGKPSRIVVIYTTGSQATMDERNRQIAEIGASLIKHW*"
+     rep_origin      2917..3273
+                     /label="R6K γ ori"
+                     /ApEinfo_revcolor="#ffef86"
+                     /ApEinfo_fwdcolor="#ffef86"
+                     /note="note: γ replication origin from E. coli plasmid R6K; requires the R6K initiator protein pi for replication"
+ORIGIN
+        1 ctgcccatgt tctttcctgc gttatcagag cttatcggcc agcctcgcag agcaggattc
+       61 ccgttgagca ccgccaggtg cgaataaggg acagtgaaga aggaacaccc gctcgcgggt
+      121 gggcctactt cacctatcct gcccggctga cgccgttgga tacaccaagg aaagtctaca
+      181 cgaacccttt ggcaaaatcc tgtatatcgt gcgaaaaagg atggatatac cgaaaaaatc
+      241 gctataatga ccccgaagca gggttatgca gcggaaagta taccttaaac aatgttcttg
+      301 tgggcggaca aaatagttgg gaactgggag gggtggaaat ggagttttta aggattattt
+      361 agggaagagt gacaaaatag atgggaactg ggtgtagcgt cgtaagctaa tacgaaaatt
+      421 aaaaatgaca aaatagtttg gaactagatt tcacttatct ggttggaacg cccatctaGC
+      481 GGTAATACGA CTCACTATAG GTCAGGAAAT GTGCGCGGAA CCAGATAATT CTTTCAGtag
+      541 cttgcagtgg gcttacatgg cgatagctag actgggcggt tttatggaca gcaagcgaac
+      601 cggaattgcc agctggggcg ccctctggta aggttgggaa gccctgcaaa gtaaactgga
+      661 tggctttctt gccgccaagg atctgatggc gcaggggatc aagatctgat caagagacag
+      721 gatgaggatc gtttcTGATG ATTGAACAAG ATGGATTGCA CGCAGGTTCT CCGGCCGCTT
+      781 GGGTGGAGAG GCTATTCGGC TATGACTGGG CACAACAGAC AATCGGCTGC TCTGATGCCG
+      841 CCGTGTTCCG GCTGTCAGCG CAGGGGCGCC CGGTTCTTTT TGTCAAGACC GACCTGTCCG
+      901 GTGCCCTGAA TGAACTCCAA GACGAGGCAG CGCGGCTATC GTGGCTGGCC ACGACGGGCG
+      961 TTCCTTGCGC AGCTGTGCTC GACGTTGTCA CTGAAGCGGG AAGGGACTGG CTGCTATTGG
+     1021 GCGAAGTGCC GGGGCAGGAT CTCCTGTCAT CTCACCTTGC TCCTGCCGAG AAAGTATCCA
+     1081 TCATGGCTGA TGCAATGCGG CGGCTGCATA CGCTTGATCC GGCTACCTGC CCATTCGACC
+     1141 ACCAAGCGAA ACATCGCATC GAGCGAGCAC GTACTCGGAT GGAAGCCGGT CTTGTCGATC
+     1201 AGGATGATCT GGACGAAGAG CATCAGGGGC TCGCGCCAGC CGAACTGTTC GCCAGGCTCA
+     1261 AGGCGCGGAT GCCCGACGGC GAGGATCTCG TCGTGACCCA TGGCGATGCC TGCTTGCCGA
+     1321 ATATCATGGT GGAAAATGGC CGCTTTTCTG GATTCATCGA CTGTGGCCGG CTGGGTGTGG
+     1381 CGGACCGCTA TCAGGACATA GCGTTGGCTA CCCGTGATAT TGCTGAAGAG CTTGGCGGCG
+     1441 AATGGGCTGA CCGCTTCCTC GTGCTTTACG GTATCGCCGC TCCCGATTCG CAGCGCATCG
+     1501 CCTTCTATCG CCTTCTTGAC GAGTTCTTCT GAgctgGCGG GACTCTGGGG TTCGCGACAC
+     1561 TGGCAGAGCA TTACGCCCTG CGATAGATGT CCACGAGGTC TCTNNNSWNN NSWNNNSWNN
+     1621 NSWNNNSWNN NSWNNNCGTA CGCTGCAGGT CGACTCACTC GGATAAGAGA CGGAAGTTAT
+     1681 GGagcatagt aacatgtcgt ctctcagcga gcggcccacg tcggctccac gcccctcttt
+     1741 aatacgacgg gcaatttgca cttcagaaaa tgaagagttt gctttagcca taacaaaagt
+     1801 ccagtatgct ttttcacagc ataactggac tgatttcagt ttacaactat tctgtctagt
+     1861 ttaagacttt attgtcatag tttagatcta ttttgttcag tttaagactt tattgtccgc
+     1921 ccacaaatcc tggtacgcgg aacccctatt tgtttatttt tctaaataca ttcaaatatg
+     1981 tatccgctca tgagacaata accctgataa atgcttcaat aatattgaaa aaggaagagt
+     2041 atgagtattc aacatttccg tgtcgccctt attccctttt ttgcggcatt ttgccttcct
+     2101 gtttttgctc acccagaaac gctggtgaaa gtaaaagatg ctgaagatca gttgggtgca
+     2161 cgagtgggtt acatcgaact ggatctcaac agcggtaaga tccttgagag ttttcgcccc
+     2221 gaagaacgtt ttccaatgat gagcactttt aaagttctgc tatgtggcgc ggtattatcc
+     2281 cgtattgacg ccgggcaaga gcaactcggt cgccgcatac actattctca gaatgacttg
+     2341 gttgagtact caccagtcac agaaaagcat cttacggatg gcatgacagt aagagaatta
+     2401 tgcagtgctg ccataaccat gagtgataac actgcggcca acttacttct gacaacgatc
+     2461 ggaggaccga aggagctaac cgcttttttg cacaacatgg gggatcatgt aactcgcctt
+     2521 gatcgttggg aaccggagct gaatgaagcc ataccaaacg acgagcgtga caccacgatg
+     2581 cctgtagcaa tggcaacaac gttgcgcaaa ctattaactg gcgaactact tactctagct
+     2641 tcccggcaac aattaataga ctggatggag gcggataaag ttgcaggacc acttctgcgc
+     2701 tcggcccttc cggctggctg gtttattgct gataaatctg gagccggtga gcgtgggtct
+     2761 cgcggtatca ttgcagcact ggggccagat ggtaagccct cccgtatcgt agttatctac
+     2821 acgacgggga gtcaggcaac tatggatgaa cgaaatagac agatcgctga gataggtgcc
+     2881 tcactgatta agcattggta acattttgta accggttgtc agccgttaag tgttcctgtg
+     2941 tcactcaaaa ttgctttgag aggctctaag ggcttctcag tgcgttacat ccctggcttg
+     3001 ttgtccacaa ccgttaaacc ttaaaagctt taaaagcctt atatattctt ttttttctta
+     3061 taaaacttaa aaccttagag gctatttaag ttgctgattt atattaattt tattgttcaa
+     3121 acatgagagc ttagtacgtg aaacatgaga gcttagtacg ttagccatga gagcttagta
+     3181 cgttagccat gagggtttag ttcgttaaac atgagagctt agtacgttaa acttgagagc
+     3241 ttagtacgtg aaacatgaga gcttagtacg tactatcaac aggttgaa
+//

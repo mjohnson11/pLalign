@@ -1,0 +1,44 @@
+
+#inset_svg {
+  position: absolute;
+}
+
+#alignment_svg {
+  position: absolute;
+}
+
+.next_prev_button {
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.next_prev_button:hover {
+  opacity: 0.9;
+}
+
+.next_prev_button:active {
+  opacity: 1;
+}
+
+.WOW_tooltip {
+  position: absolute;
+  left: 200px;
+  display: none;
+  background: white;
+  background: rgb(255,255,255, 0.8);
+  border-radius: 5px;
+  padding: 5px;
+  z-index: 3;
+  width: 200px;
+  color: black;
+}
+
+.WOW_tooltip h2 {
+  font-size: 16px;
+  margin: 0px;
+}
+
+.WOW_tooltip p {
+  font-size: 14px;
+  margin: 2px;
+}
