@@ -12,9 +12,9 @@
 import streamlit as st
 import io
 import numpy as np
-from Bio import SeqIO
+import pandas as pd
 
 # Title and description
 st.title("Plasmid Alignment App")
 st.write("Align reads to a reference plasmid and visualize the results.")
-st.write(str(np.exp(4)))
+st.write(str(pd.notnull(3)))
