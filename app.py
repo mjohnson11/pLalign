@@ -12,6 +12,7 @@
 import streamlit as st
 import io
 import numpy as np
+from Bio import SeqIO
 
 # Title and description
 st.title("Plasmid Alignment App")
