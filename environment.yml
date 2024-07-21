@@ -4,6 +4,7 @@ channels:
   - https://repo.anaconda.com/pkgs/r/linux-64
   - https://conda.anaconda.org/bioconda/linux-64  # Explicit Bioconda URL
   - https://conda.anaconda.org/conda-forge/linux-64 # Explicit Conda-forge URL
+  - https://plotly.anaconda.org/plotly/linux-64 
 dependencies:
   - biopython=1.83
   - mappy==2.28
