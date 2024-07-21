@@ -13,8 +13,9 @@ import streamlit as st
 import io
 from Bio import SeqIO
 import mappy as mp
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
+#import plotly.graph_objects as go
+#from plotly.subplots import make_subplots
+import matplotlib.pyplot as plt
 import streamlit.components.v1 as components
 from string import Template
 import json
