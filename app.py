@@ -14,8 +14,10 @@ import io
 import numpy as np
 import pandas as pd
 from Bio import SeqIO
+import mappy as mp
 
 # Title and description
 st.title("Plasmid Alignment App")
 st.write("Align reads to a reference plasmid and visualize the results.")
 st.write(str(pd.notnull(3)))
+st.write(mp)
