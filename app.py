@@ -11,7 +11,9 @@
 
 import streamlit as st
 import io
+import numpy as np
 
 # Title and description
 st.title("Plasmid Alignment App")
 st.write("Align reads to a reference plasmid and visualize the results.")
+st.write(str(np.exp(4)))
