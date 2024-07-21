@@ -11,8 +11,9 @@
 
 import streamlit as st
 import io
-import mappy as mp
 from Bio import SeqIO
+import mappy as mp
+
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import streamlit.components.v1 as components
@@ -43,7 +44,10 @@ def do_alignment(aligner, read_data, stop_point=None):
     all_hits = []
     read_lens = []
     for rec in read_data: #name, seq, qual in mp.fastx_read(io.StringIO(text)):
-        seq = str(rec.seq)
+        if type(rec) == str:
+            seq = rec
+        else:
+            seq = str(rec.seq)
         read_lens.append(len(seq))
         i += 1
         if i > THRESH:
@@ -116,15 +120,21 @@ if ref_type == 'Test data':
     read_data = SeqIO.parse('./test_data/FAY32610_pass_barcode13_92612969_9c09aa16_0.fastq', "fastq")
     all_hits, read_lens = do_alignment(aligner, read_data)
 else:
-    reads_file = st.file_uploader("Upload Reads (FASTQ or FASTA)", type=["fastq", "fasta"])
-    if reads_file:
-        # Minimap2 alignment
-        text_io = io.TextIOWrapper(reads_file, encoding="UTF-8")
-        text = text_io.read()
-        st.success("File uploaded.")
-        aligner = mp.Aligner(seq=str(ref_seq)+str(ref_seq)) # DOUBLING REF SEQ because it's circular
-        read_data = SeqIO.parse(io.StringIO(text), "fastq" if reads_file.name.endswith(".fastq") else "fasta")
-        all_hits, read_lens = do_alignment(aligner, read_data)
+    aligner = mp.Aligner(seq=str(ref_seq)+str(ref_seq)) # DOUBLING REF SEQ because it's circular
+    reads_type = st.radio("Reads Type", ("File Upload", "Pasted Sequence"))
+    if reads_type == "File Upload":
+        reads_file = st.file_uploader("Upload Reads (FASTQ or FASTA)", type=["fastq", "fasta"])
+        if reads_file:
+            # Minimap2 alignment
+            text_io = io.TextIOWrapper(reads_file, encoding="UTF-8")
+            text = text_io.read()
+            st.success("File uploaded.")
+            read_data = SeqIO.parse(io.StringIO(text), "fastq" if reads_file.name.endswith(".fastq") else "fasta")
+            all_hits, read_lens = do_alignment(aligner, read_data)
+    else:
+        read_seq = st.text_area("Paste Reference Sequence")
+        if read_seq:
+            all_hits, read_lens = do_alignment(aligner, [read_seq])
 
 if all_hits:
     #process_alignments(all_hits, str(ref_seq))
