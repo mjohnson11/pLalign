@@ -1,5 +1,7 @@
 name: plalign
-channels:
+channels:  
+  - conda-forge
+  - bioconda
   - defaults
 dependencies:
   - biopython=1.83
