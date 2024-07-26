@@ -21,7 +21,6 @@ from string import Template
 import json
 
 annotation_length_thresh = 50
-alignment_len_thresh = 10
 max_alignments = 1000
 mapq_thresh = 0
 
@@ -39,7 +38,7 @@ def get_genbank_features(ref_data):
             ref_features.append({'start': start, 'end': end, 'strand': strand, 'label': label, 'note': label + ' ' + note})
     return ref_features
 
-def do_alignment(aligner, read_data, stop_point=None):
+def do_alignment(aligner, read_data, read_len_thresh, alignment_len_thresh, stop_point=None):
     i = 0
     all_hits = []
     read_lens = []
@@ -49,29 +48,27 @@ def do_alignment(aligner, read_data, stop_point=None):
         else:
             seq = str(rec.seq)
         read_lens.append(len(seq))
-        i += 1
-        if i > THRESH:
-            break
-        # hits sorted by length
-        hits = sorted([h for h in aligner.map(seq)], key=lambda hit: -1*(hit.r_en-hit.r_st))
-        if len(hits) > 0:
-            hit = hits[0]
-            hit_len = hit.r_en-hit.r_st
-            if hit_len > alignment_len_thresh and hit.mapq >= mapq_thresh:
-                all_hits.append({
-                        'cigar': hit.cigar, 
-                        'ref_start': hit.r_st, 
-                        'ref_end': hit.r_en, 
-                        'strand': hit.strand, 
-                        'query_start': hit.q_st, 
-                        'query_end': hit.q_en, 
-                        'query_seq': seq,
-                        'mapq': hit.mapq
-                    })
+        if len(seq) >= read_len_thresh:
+            i += 1
+            # hits sorted by length
+            hits = sorted([h for h in aligner.map(seq)], key=lambda hit: -1*(hit.r_en-hit.r_st))
+            if len(hits) > 0:
+                hit = hits[0] # Only taking the top hit
+                hit_len = hit.r_en-hit.r_st
+                if hit_len > alignment_len_thresh and hit.mapq >= mapq_thresh:
+                    all_hits.append({
+                            'cigar': hit.cigar, 
+                            'ref_start': hit.r_st, 
+                            'ref_end': hit.r_en, 
+                            'strand': hit.strand, 
+                            'query_start': hit.q_st, 
+                            'query_end': hit.q_en, 
+                            'query_seq': seq,
+                            'mapq': hit.mapq
+                        })
 
-        if (stop_point and stop_point < i) or len(all_hits)>max_alignments:
-            break
-    st.write(len(all_hits))
+            if (stop_point and stop_point < i) or len(all_hits)>max_alignments:
+                break
     return all_hits, read_lens
         
 
@@ -81,7 +78,7 @@ st.title("Plasmid Alignment App")
 st.write("Align reads to a reference plasmid and visualize the results.")
 
 # Radio button for reference input
-ref_type = st.radio("Reference Type", ("File Upload", "Pasted Sequence", "Test data"))
+ref_type = st.radio("Reference Type", ("File Upload", "Pasted Sequence", "Test data"), horizontal=True)
 ref_seq = None
 if ref_type == "Test data":
     ref_data = SeqIO.read('./test_data/pmj09.gb', "genbank")
@@ -101,8 +98,6 @@ elif ref_type == "File Upload":
         ref_features = []
         if is_genbank:
             ref_features = get_genbank_features(ref_data)
-            
-        st.write(len(ref_features))
 else:
     # Text area for pasted sequence
     ref_seq = st.text_area("Paste Reference Sequence")
@@ -113,15 +108,26 @@ if not ref_seq:
     st.warning("Please provide a valid reference sequence.")
     st.stop()
     
+st.write('Reference length', len(ref_seq))
+    
+
+col1, col2 = st.columns(2)
+#with col1:
+#    topology = st.radio("Topology", ("Circular", "Linear"))
+with col1:
+    read_len_thresh = st.number_input("Read Length Threshold", min_value=0, value=100)
+with col2:
+    align_len_thresh = st.number_input("Alignment Length Threshold", min_value=0, value=100)
+    
 all_hits = None
 # Upload reads file
 if ref_type == 'Test data':
     aligner = mp.Aligner(seq=str(ref_seq)+str(ref_seq)) # DOUBLING REF SEQ because it's circular
     read_data = SeqIO.parse('./test_data/FAY32610_pass_barcode13_92612969_9c09aa16_0.fastq', "fastq")
-    all_hits, read_lens = do_alignment(aligner, read_data)
+    all_hits, read_lens = do_alignment(aligner, read_data, read_len_thresh, align_len_thresh, stop_point=THRESH)
 else:
     aligner = mp.Aligner(seq=str(ref_seq)+str(ref_seq)) # DOUBLING REF SEQ because it's circular
-    reads_type = st.radio("Reads Type", ("File Upload", "Pasted Sequence"))
+    reads_type = st.radio("Reads Type", ("File Upload", "Pasted Sequence"), horizontal=True)
     if reads_type == "File Upload":
         reads_file = st.file_uploader("Upload Reads (FASTQ or FASTA)", type=["fastq", "fasta"])
         if reads_file:
@@ -130,11 +136,12 @@ else:
             text = text_io.read()
             st.success("File uploaded.")
             read_data = SeqIO.parse(io.StringIO(text), "fastq" if reads_file.name.endswith(".fastq") else "fasta")
-            all_hits, read_lens = do_alignment(aligner, read_data)
+            all_hits, read_lens = do_alignment(aligner, read_data, read_len_thresh, align_len_thresh, stop_point=THRESH)
+            st.write(len(all_hits))
     else:
         read_seq = st.text_area("Paste Reference Sequence")
         if read_seq:
-            all_hits, read_lens = do_alignment(aligner, [read_seq])
+            all_hits, read_lens = do_alignment(aligner, [read_seq], read_len_thresh, align_len_thresh, stop_point=THRESH)
 
 if all_hits:
     #process_alignments(all_hits, str(ref_seq))

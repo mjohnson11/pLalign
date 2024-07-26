@@ -42,3 +42,16 @@
   font-size: 14px;
   margin: 2px;
 }
+
+.zoom_thing {
+  stroke-width: 1;
+  display: none;
+}
+
+.zoom_thing:hover {
+  stroke-width: 2;
+}
+
+.zoom_thing:active {
+  stroke-width: 1.5;
+}
