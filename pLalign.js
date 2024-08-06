@@ -1,9 +1,8 @@
 
+// PARAMETERS
 const alignment_num = 30;
-
 const background_color = '#333';
 const base_color = 'white';
-
 const colors = {
   'al': '#777',
   'X': '#F00',
@@ -27,6 +26,7 @@ colors['match'] = colors['al'];
 colors['insertion'] = colors['I']; 
 colors['deletion'] = colors['D'];
 
+// UTILITY FUNCTIONS
 function rc(s) {
   // reverse complement
   const complement = {'a': 't', 't': 'a', 'c': 'g', 'g': 'c', 
@@ -48,11 +48,12 @@ function measureText(string, fontSize = 10) {
     .reduce((cur, acc) => acc + cur) * fontSize
 }
 
-
 function point_on_circle(cx, cy, r, theta) {
   return [cx+Math.cos(theta)*r, cy+Math.sin(theta)*r];
 }
 
+
+// MAIN CLASS
 class Alignerator {
 
   constructor(data) {
@@ -77,7 +78,7 @@ class Alignerator {
     this.inset_offset = 5;
     this.inset_top = 20;
     this.inset_al_h = 12;
-    this.inset_ref_h = 55;
+    this.inset_ref_h = 70;
     this.alignment_page = 0;
     this.svg = d3.select('#pLalignViz').append('svg')
       .attr('id', 'alignment_svg')
@@ -214,7 +215,6 @@ class Alignerator {
     this.drag_el.call(dragBehavior);
 
     let startAngle;
-    let startPoint;
     let clockwise;
 
     function getAngle(x, y) {
@@ -228,7 +228,6 @@ class Alignerator {
 
     function dragStart(e) {
       const [x, y] = [e.x, e.y];
-      startPoint = [x, y];
       startAngle = getAngle(x - self.c, y - self.c);
       clockwise = ['not sure yet', true];
     }
@@ -314,7 +313,7 @@ class Alignerator {
   }
 
   zoom_out() {
-    const add_len = (this.domain_len < this.refLen/2) ? this.domain_len/2 : Math.floor((this.refLen - this.domain_len) / 2)-1;
+    const add_len = (this.domain_len < this.refLen/2) ? Math.floor(this.domain_len/2) : Math.floor((this.refLen - this.domain_len) / 2)-1;
     this.focal_start = this.focal_start - add_len;
     if (this.focal_start < 0) this.focal_start = this.refLen + this.focal_start;
     this.focal_end = (this.focal_end + add_len) % this.refLen;
@@ -323,68 +322,82 @@ class Alignerator {
 
   setup_focal_region() {
     self = this;
-    self.midpoint = self.inset_w/2;
+    this.midpoint = this.inset_w/2;
 
-    self.gene_g = self.inset_svg.append('g');
+    this.gene_g = this.inset_svg.append('g');
 
-    /*self.drag_zone = self.inset_svg.append('rect')
+    this.drag_zone = this.inset_svg.append('rect')
       .attr('width', self.inset_w)
-      .attr('height', self.inset_ref_h);*/
+      .attr('y', self.inset_ref_h-20)
+      .attr('height', 20)
+      .attr('fill', '#333');
 
-    self.zoom_in_g = self.inset_svg.append('g')
+    this.drag_rect = this.inset_svg.append('rect')
+      .attr('fill', 'red')
+      .attr('opacity', 0.8)
+      .attr('y', self.inset_ref_h-20)
+      .attr('height', 20)
+      .attr('x', 0)
+      .attr('width', 0)
+
+    this.zoom_in_g = this.inset_svg.append('g')
       .attr('class', 'zoom_thing')
       .on('click', (e) => self.zoom_in())
     
-    self.zoom_out_g = self.inset_svg.append('g')
+    this.zoom_out_g = this.inset_svg.append('g')
       .attr('class', 'zoom_thing')
       .on('click', (e) => self.zoom_out())
     
-    self.zoom_in_g.append('circle')
+    this.zoom_in_g.append('circle')
       .attr('cx', self.midpoint+17)
       .attr('cy', 7)
       .attr('r', 6)
       .attr('stroke', base_color)
 
-    self.zoom_in_g.append('line')
-      .attr('x1', self.midpoint+17-3)
-      .attr('x2', self.midpoint+17+3)
+    this.zoom_in_g.append('line')
+      .attr('x1', this.midpoint+17-3)
+      .attr('x2', this.midpoint+17+3)
       .attr('y1', 7)
       .attr('y2', 7)
       .attr('stroke', base_color)
 
-    self.zoom_in_g.append('line')
-      .attr('x1', self.midpoint+17)
-      .attr('x2', self.midpoint+17)
+    this.zoom_in_g.append('line')
+      .attr('x1', this.midpoint+17)
+      .attr('x2', this.midpoint+17)
       .attr('y1', 7-3)
       .attr('y2', 7+3)
       .attr('stroke', base_color)
 
-    self.zoom_out_g.append('circle')
-      .attr('cx', self.midpoint-17)
+    this.zoom_out_g.append('circle')
+      .attr('cx', this.midpoint-17)
       .attr('cy', 7)
       .attr('r', 6)
       .attr('stroke', base_color)
 
-    self.zoom_out_g.append('line')
-      .attr('x1', self.midpoint-17-3)
-      .attr('x2', self.midpoint-17+3)
+    this.zoom_out_g.append('line')
+      .attr('x1', this.midpoint-17-3)
+      .attr('x2', this.midpoint-17+3)
       .attr('y1', 7)
       .attr('y2', 7)
       .attr('stroke', base_color)
 
 
-    /*self.dragAction = d3.drag()
+    const dragAction = d3.drag()
       .on('start', function(e) {
-        self.drag_start_mouse = e.x;
+        self.inset_drag_start_mouse = e.x;
       })
       .on('drag', function(e) {
-        console.log(e.x - self.drag_start_mouse);
+        let start = Math.max(Math.min(e.x, self.inset_drag_start_mouse), 0);
+        let end = Math.min(Math.max(e.x, self.inset_drag_start_mouse), self.inset_w);
+        self.drag_rect.attr('x', start).attr('width', end-start);
       })
       .on('end', function(e) {
-        console.log('wow');
-        self.draw_focal_region();
+        let start = Math.max(Math.min(e.x, self.inset_drag_start_mouse), 0);
+        let end = Math.min(Math.max(e.x, self.inset_drag_start_mouse), self.inset_w);
+        self.drag_rect.attr('x', start).attr('width', 0);
+        self.set_focal_region(self.focal_start+Math.floor(start*self.domain_len/self.inset_w), self.focal_start+Math.ceil(end*self.domain_len/self.inset_w));
       })
-    self.drag_zone.call(self.dragAction);*/
+    this.drag_zone.call(dragAction);
   }
 
   make_gene_display(d) {
@@ -398,7 +411,7 @@ class Alignerator {
       right = Math.round(this.inset_w*d.indexed_end/this.domain_len);
     }
     const width = right-left;
-    const height = Math.max(Math.min(30, 1000000/this.domain_len), 20);
+    const height = 20; //Math.max(Math.min(30, 1000000/this.domain_len), 20);
     const halfHeight = height / 2;
     const chevron_size = (width < 10) ? 0 : Math.min(width/4, 20);
     const top = 20
@@ -512,6 +525,7 @@ class Alignerator {
     const self = this;
     let al_el = this.inset_svg.append('g').attr('class', 'inset_alignment').style('white-space', 'pre-wrap');
     for (let i=0; i<bases.length; i++) {
+  
       let al = this.base_alignments[al_index][bases[i]];
       let g = al_el.append('g')
         .on('mouseover', (e) => self.show_tooltip(e.x, e.y, self.parse_tooltip_text(al)))

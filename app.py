@@ -1,5 +1,9 @@
 ### TODO
 
+#Coverage!!
+#forward / reverse strand
+#called snps
+
 # refactor so alignment strings etc. are made in python
 # ref features in inset
 # insertion rectangle showing extent in inset
@@ -32,8 +36,10 @@ def get_genbank_features(ref_data):
         start = f.location.start
         end = f.location.end
         strand = f.location.strand
-        label = f.qualifiers.get('label', [''])[0] if 'label' in f.qualifiers else ''
-        note = f.qualifiers.get('note', [''])[0] if 'note' in f.qualifiers else ''
+        label = f.qualifiers.get('label', [' '])[0] if 'label' in f.qualifiers else ' '
+        if label == ' ' and 'locus_tag' in f.qualifiers:
+            label = f.qualifiers.get('locus_tag', [' '])[0]
+        note = f.qualifiers.get('note', [' '])[0] if 'note' in f.qualifiers else ' '
         if (end-start) > annotation_length_thresh:
             ref_features.append({'start': start, 'end': end, 'strand': strand, 'label': label, 'note': label + ' ' + note})
     return ref_features
