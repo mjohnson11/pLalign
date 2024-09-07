@@ -116,8 +116,10 @@ class Alignerator {
   }
 
   make_feature_path(d) {
+    console.log(d);
     const start_theta = 2*Math.PI*(d.start/this.refLen);
     const end_theta = 2*Math.PI*(d.end/this.refLen);
+    const large_arc_flag = d.end-d.start > this.refLen/2 ? '1' : '0';
     const chevron_theta = Math.min((end_theta-start_theta)/10, Math.PI/40);
     let p = ''
     const arc_outside = 'A ' + String(this.ref_r+this.feature_h/2)+' '+String(this.ref_r+this.feature_h/2)+' 0 ';
@@ -130,10 +132,10 @@ class Alignerator {
       let tip = point_on_circle(this.c, this.c, this.ref_r, end_theta);
       p += 'M'+String(s1[0])+' '+String(s1[1])+' '
       p += 'L'+String(s2[0])+' '+String(s2[1])+' '
-      p += arc_outside + '0 1 '+String(e2[0])+' '+String(e2[1])+' '
+      p += arc_outside + large_arc_flag + ' 1 '+String(e2[0])+' '+String(e2[1])+' '
       p += 'L'+String(tip[0])+' '+String(tip[1])+' '
       p += 'L'+String(e1[0])+' '+String(e1[1])+' '
-      p += arc_inside + '0 0 '+String(s1[0])+' '+String(s1[1])+' '
+      p += arc_inside + large_arc_flag + ' 0 '+String(s1[0])+' '+String(s1[1])+' '
     } else {
       let s1 = point_on_circle(this.c, this.c, this.ref_r-this.feature_h/2, start_theta+chevron_theta);
       let s2 = point_on_circle(this.c, this.c, this.ref_r+this.feature_h/2, start_theta+chevron_theta);
@@ -142,10 +144,10 @@ class Alignerator {
       let tip = point_on_circle(this.c, this.c, this.ref_r, start_theta);
       p += 'M'+String(e1[0])+' '+String(e1[1])+' '
       p += 'L'+String(e2[0])+' '+String(e2[1])+' '
-      p += arc_outside + '0 0 '+String(s2[0])+' '+String(s2[1])+' '
+      p += arc_outside + large_arc_flag + ' 0 '+String(s2[0])+' '+String(s2[1])+' '
       p += 'L'+String(tip[0])+' '+String(tip[1])+' '
       p += 'L'+String(s1[0])+' '+String(s1[1])+' '
-      p += arc_inside + '0 1 '+String(e1[0])+' '+String(e1[1])+' '
+      p += arc_inside + large_arc_flag + ' 1 '+String(e1[0])+' '+String(e1[1])+' '
     }
     return p;
   }
@@ -153,12 +155,13 @@ class Alignerator {
   make_feature_text_path(d) {
     const start_theta = 2*Math.PI*(d.start/this.refLen);
     const end_theta = 2*Math.PI*(d.end/this.refLen);
+    const large_arc_flag = d.end-d.start > this.refLen/2 ? '1' : '0';
     const chevron_theta = Math.min((end_theta-start_theta)/10, Math.PI/40);
     const arc_inside = 'A ' + String(this.ref_r-this.feature_h/2+3)+' '+String(this.ref_r-this.feature_h/2+3)+' 0 ';
     const s1 = point_on_circle(this.c, this.c, this.ref_r-this.feature_h/2+3, start_theta+chevron_theta);
     const e1 = point_on_circle(this.c, this.c, this.ref_r-this.feature_h/2+3, end_theta-chevron_theta);
     let p = 'M'+String(s1[0])+' '+String(s1[1])+' '
-    p += arc_inside + '0 1 '+String(e1[0])+' '+String(e1[1])+' '
+    p += arc_inside + large_arc_flag + ' 1 '+String(e1[0])+' '+String(e1[1])+' '
     return p;
   }
 
@@ -172,12 +175,20 @@ class Alignerator {
     return p;
   }
 
-  make_alignment_arc(refpos1, refpos2, r, strand) {
+  make_alignment_arc(refpos1, refpos2, r, strand, verbose=false) {
     const alignment_len = Math.abs(refpos2-refpos1);
-    const clockwise_flag = strand == 1 ? 1 : 0;
-    const large_arc_flag = alignment_len > this.refLen/2 ? 1 : 0;
     const start_theta = 2*Math.PI*(refpos1/this.refLen);
     const end_theta = 2*Math.PI*(refpos2/this.refLen);
+    if (alignment_len > this.refLen) {
+      console.log('Insertion greater than plasmid length!');
+      // hacky way to make a circle here
+      return this.make_arc(start_theta+0.001, start_theta-0.001, r, 1, 1);
+    }
+    const clockwise_flag = strand == 1 ? 1 : 0;
+    const large_arc_flag = alignment_len > this.refLen/2 ? 1 : 0;
+    //if ((verbose) && (alignment_len>100)) {
+    //  console.log(refpos1, refpos2, r, strand, alignment_len, clockwise_flag, large_arc_flag, start_theta, end_theta);
+    //}
     return this.make_arc(start_theta, end_theta, r, clockwise_flag, large_arc_flag);
   }
 
@@ -711,7 +722,7 @@ class Alignerator {
       console.log('Q', query.length, query_position);
       alignment_by_ref_pos[this.refpos(strand, ref_position)].push(['post-alignment', strand == 1 ? '>' : '<', this.qrc(strand, query.slice(query_position, query.length))]);
     }
-    console.log(ref_start, ref_position, ref_start - ref_position, strand, mismatches.length);
+
     //console.log(mismatches, deletions, insertions);
     let al_g = this.svg.append('g')
       .attr('class', 'alignment_group');
@@ -736,7 +747,7 @@ class Alignerator {
       .attr('fill', 'none')
       .attr('stroke', al_color)
       .attr('stroke-width', this.align_r/2)
-      .attr('d', self.make_alignment_arc(ref_start*strand, ref_position*strand, this.ref_r+this.feature_h+alignment_count*this.align_r_step, strand));
+      .attr('d', self.make_alignment_arc(ref_start*strand, (ref_position-1)*strand, this.ref_r+this.feature_h+alignment_count*this.align_r_step, strand));
 
     al_g.selectAll('.mismatch_marks')
       .data(mismatches)
@@ -766,7 +777,7 @@ class Alignerator {
         .attr('fill', 'none')
         .attr('stroke', colors['I'])
         .attr('stroke-width', 3*this.align_r/4) //(d) => (d[1]-d[0]) > 5 ? 3*this.align_r/4 : this.align_r/3)
-        .attr('d', (d) => self.make_alignment_arc((d[0]-d[1]/2)*strand-0.5, (d[0]+d[1]/2)*strand+0.5, this.ref_r+this.feature_h+alignment_count*this.align_r_step+this.align_r/2, strand));
+        .attr('d', (d) => self.make_alignment_arc((d[0]-d[1]/2)*strand-0.5, (d[0]+d[1]/2)*strand+0.5, this.ref_r+this.feature_h+alignment_count*this.align_r_step+this.align_r/2, strand, true));
 
     return alignment_by_ref_pos
   }

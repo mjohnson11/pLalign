@@ -44,7 +44,44 @@ def get_genbank_features(ref_data):
             ref_features.append({'start': start, 'end': end, 'strand': strand, 'label': label, 'note': label + ' ' + note})
     return ref_features
 
-def do_alignment(aligner, read_data, read_len_thresh, alignment_len_thresh, stop_point=None):
+
+def rc(s):
+    # reverse complement
+    return ''.join([{'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C'}.get(i,i) for i in s[::-1]])
+
+
+def reorient_circular_read(read, orientation_seq):
+    """
+    reorients a circular read by looking for 20mers from 
+    an orientation sequence (which has to be at least 200 bp long)
+    Note that this will cause a small deletion where the read actually started
+    """
+    def get_offsets(r, kmer20s):
+        offsets = []
+        for i in range(len(kmer20s)):
+            if kmer20s[i] in r:
+                offsets.append((r.index(kmer20s[i])-i*20+len(r)) % len(r))
+        return offsets
+    
+    assert len(orientation_seq) >= 200 # orientation_seq must be at least 200 bp
+    orient_kmers = [orientation_seq[i*20:(i+1)*20] for i in range(10)]
+    forward_offsets = get_offsets(read, orient_kmers)
+    if len(forward_offsets) >= 5:
+        # rough median
+        reindex = sorted(forward_offsets)[len(forward_offsets) // 2]
+        return read[reindex:]+read[:reindex]
+    else:
+        rc_read = rc(read)
+        back_offsets = get_offsets(rc_read, orient_kmers)
+        if len(back_offsets) >= 5:
+            # rough median
+            reindex = sorted(back_offsets)[len(back_offsets) // 2]
+            return rc_read[reindex:]+rc_read[:reindex]
+        else:
+            # no reindexing, didn't find the kmers
+            return read
+
+def do_alignment(aligner, read_data, read_len_thresh, alignment_len_thresh, stop_point=None, reorient_read_seq=None):
     i = 0
     all_hits = []
     read_lens = []
@@ -56,6 +93,8 @@ def do_alignment(aligner, read_data, read_len_thresh, alignment_len_thresh, stop
         read_lens.append(len(seq))
         if len(seq) >= read_len_thresh:
             i += 1
+            if reorient_read_seq:
+                seq = reorient_circular_read(seq, reorient_read_seq)
             # hits sorted by length
             hits = sorted([h for h in aligner.map(seq)], key=lambda hit: -1*(hit.r_en-hit.r_st))
             if len(hits) > 0:
@@ -125,12 +164,18 @@ with col1:
 with col2:
     align_len_thresh = st.number_input("Alignment Length Threshold", min_value=0, value=100)
     
+reindex_reads = st.radio("Reindex Reads", ("Yes", "No"), horizontal=True)
+if reindex_reads == 'Yes':
+    re_or = str(ref_seq)[:200]
+else:
+    re_or = None
+    
 all_hits = None
 # Upload reads file
 if ref_type == 'Test data':
     aligner = mp.Aligner(seq=str(ref_seq)+str(ref_seq)) # DOUBLING REF SEQ because it's circular
     read_data = SeqIO.parse('./test_data/FAY32610_pass_barcode13_92612969_9c09aa16_0.fastq', "fastq")
-    all_hits, read_lens = do_alignment(aligner, read_data, read_len_thresh, align_len_thresh, stop_point=THRESH)
+    all_hits, read_lens = do_alignment(aligner, read_data, read_len_thresh, align_len_thresh, stop_point=THRESH, reorient_read_seq=re_or)
 else:
     aligner = mp.Aligner(seq=str(ref_seq)+str(ref_seq)) # DOUBLING REF SEQ because it's circular
     reads_type = st.radio("Reads Type", ("File Upload", "Pasted Sequence"), horizontal=True)
@@ -142,12 +187,12 @@ else:
             text = text_io.read()
             st.success("File uploaded.")
             read_data = SeqIO.parse(io.StringIO(text), "fastq" if reads_file.name.endswith(".fastq") else "fasta")
-            all_hits, read_lens = do_alignment(aligner, read_data, read_len_thresh, align_len_thresh, stop_point=THRESH)
+            all_hits, read_lens = do_alignment(aligner, read_data, read_len_thresh, align_len_thresh, stop_point=THRESH, reorient_read_seq=re_or)
             st.write(len(all_hits))
     else:
         read_seq = st.text_area("Paste Reference Sequence")
         if read_seq:
-            all_hits, read_lens = do_alignment(aligner, [read_seq], read_len_thresh, align_len_thresh, stop_point=THRESH)
+            all_hits, read_lens = do_alignment(aligner, [read_seq], read_len_thresh, align_len_thresh, stop_point=THRESH, reorient_read_seq=re_or)
 
 if all_hits:
     #process_alignments(all_hits, str(ref_seq))
