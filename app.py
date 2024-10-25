@@ -122,7 +122,7 @@ def do_alignment(aligner, read_data, read_len_thresh, alignment_len_thresh, stop
 # Title and description
 st.title("Plasmid Alignment App")
 st.write("Align reads to a reference plasmid and visualize the results.")
-st.warning('(currently only tested on chrome)', icon="⚠️")
+st.warning('(Currently only tested on chrome)', icon="⚠️")
 
 # Radio button for reference input
 ref_type = st.radio("Reference Type", ("File Upload", "Pasted Sequence", "Test data"), horizontal=True)
