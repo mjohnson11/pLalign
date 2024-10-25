@@ -90,6 +90,7 @@ def do_alignment(aligner, read_data, read_len_thresh, alignment_len_thresh, stop
             seq = rec
         else:
             seq = str(rec.seq)
+        seq = seq.upper()
         read_lens.append(len(seq))
         if len(seq) >= read_len_thresh:
             i += 1
@@ -121,6 +122,7 @@ def do_alignment(aligner, read_data, read_len_thresh, alignment_len_thresh, stop
 # Title and description
 st.title("Plasmid Alignment App")
 st.write("Align reads to a reference plasmid and visualize the results.")
+st.warning('(currently only tested on chrome)', icon="⚠️")
 
 # Radio button for reference input
 ref_type = st.radio("Reference Type", ("File Upload", "Pasted Sequence", "Test data"), horizontal=True)
@@ -153,6 +155,7 @@ if not ref_seq:
     st.warning("Please provide a valid reference sequence.")
     st.stop()
     
+ref_seq = ref_seq.upper()
 st.write('Reference length', len(ref_seq))
     
 
